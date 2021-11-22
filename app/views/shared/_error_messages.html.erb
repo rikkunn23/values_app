@@ -1,0 +1,13 @@
+<!-- 、複数のビューで使われるパーシャルは専用のディレクトリ「shared」に置く-->
+<% if @user.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      入力された内容の中に <%= pluralize(@user.errors.count, "error") %>があります
+    </div>
+    <ul>
+    <% @user.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>

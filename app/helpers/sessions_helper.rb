@@ -30,7 +30,7 @@ module SessionsHelper
       #cookieに情報があった場合その情報をセッションに更新する
       user = User.find_by(id: user_id)
       #user_idがcookieに更新されていた場合
-      if user && user.authenticated?(cookies[:remember_token])
+      if user && user.authenticated?(:remember,cookies[:remember_token])
         #tokenとidを比較
         log_in user #user_idをセッションに更新
         @current_user = user #セッションに保存全ての情報を

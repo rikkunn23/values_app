@@ -15,4 +15,5 @@ get    '/login',   to: 'sessions#new'
 post   '/login',   to: 'sessions#create'
 delete '/logout',  to: 'sessions#destroy'
 resources :users
+resources :account_activations, only: [:edit] #ユーザーの承認メールはupdateではなくGETで送信されるためにeditを使っている
 end

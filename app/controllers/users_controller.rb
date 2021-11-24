@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 #アクションを起こしたい時を指定できる
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update]
-  before_action :admin_user,     only: :destroy
+  before_action :admin_user,     only: :destroy　#管理者
 
 
   # 全てのユーザーを照会
@@ -27,9 +27,15 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      log_in @user #作成してdbからセッションを参照して一致したら
-      flash[:success] = "アカウントが作成されました！valuseへようこそ"
-      redirect_to @user
+      @user.send_activation_email #メールを送信するモデルに定義
+
+
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
+
+      # log_in @user #作成してdbからセッションを参照して一致したら
+      # flash[:success] = "アカウントが作成されました！valuseへようこそ"
+      # redirect_to @user
       #redirect_to user_url(@user)
     else
       render 'new'
@@ -83,5 +89,11 @@ class UsersController < ApplicationController
           redirect_to(root_url) unless current_user?(@user)
           # redirect_to(root_url) unless @user == current_user
         end
+
+        #管理者なのかを確認
+        def admin_user
+          redirect_to(root_url) unless current_user.admin?
+        end
+
 
 end

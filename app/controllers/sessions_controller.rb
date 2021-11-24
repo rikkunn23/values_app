@@ -8,8 +8,9 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     # 中身があるかどうかパスワードとメアドが一致するか
     if user && user.authenticate(params[:session][:password])
-      log_in user #セッションに保存 helperに定義
 
+      if user.activated?
+        log_in user #セッションに保存 helperに定義
 #ifを三項演算子で表している   # remember user #cookieに保存
 #checkが入る=1=クッキーに保存
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
@@ -17,9 +18,10 @@ class SessionsController < ApplicationController
       redirect_back_or user
       # redirect_to user #user_url(user)
     else
-      flash.now[:danger] = 'メールアドレスまたはパスワードが違います'
-      # renderするとリクエストとみなされないために.nowをつける必要がある
-      render 'new'
+      message  = 'メールアドレスまたはパスワードが違います'
+      message += "Check your email for the activation link."
+      flash[:warning] = message
+      redirect_to root_url
     end
   end
 

@@ -1,0 +1,15 @@
+<% provide(:title, 'All users') %>
+<h1>All users</h1>
+
+<!-- @usersオブジェクトを自動的に見つける -->
+<%= will_paginate %>
+
+<ul class="users">
+<!-- ユーザー分eachを回してリストを作る -->
+  <% @users.each do |user| %>
+<!-- _userを自動的に探しに行く -->
+  <%= render user %>
+
+  <% end %>
+</ul>
+<%= will_paginate %>

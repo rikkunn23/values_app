@@ -3,7 +3,7 @@ User.create!(name:  "wakaharariku",
              email: "example@railstutorial.org",
              password:              "riku1123",
              password_confirmation: "riku1123",
-             admin: true
+             admin: true,
              activated: true,
              activated_at: Time.zone.now)
 

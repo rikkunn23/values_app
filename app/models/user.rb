@@ -81,4 +81,12 @@ class User < ApplicationRecord #ActiveRecordが適用
       self.activation_token  = User.new_token
       self.activation_digest = User.digest(activation_token)
     end
+
+
+
+    #トークルーム
+    # throughオプションは中間テーブルを経由して関連先のモデルを取得
+    has_many :messages
+    has_many :entries
+    has_many :rooms, through: :entries
 end

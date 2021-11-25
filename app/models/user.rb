@@ -41,6 +41,7 @@ class User < ApplicationRecord #ActiveRecordが適用
        # 渡されたトークンがダイジェストと一致したらtrueを返す
        def authenticated?(attribute, token)
         digest = self.send("#{attribute}_digest")
+        return false if digest.nil?
 # //////returnを使ってここで処理を止めている他のブラウザの対策//////////
 
     # BCrypt::Password.new(remember_digest) == remember_token

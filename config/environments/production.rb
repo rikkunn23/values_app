@@ -127,7 +127,7 @@ Rails.application.configure do
 
   #メールを送るための設定
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :smtp
+  ActionMailer::Base.delivery_method = :smtp
   host = 'valuse.herokuapp.com'
 
   config.action_mailer.default_url_options = { host: host }

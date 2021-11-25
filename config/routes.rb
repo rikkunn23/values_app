@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'password_resets/new'
+  get 'password_resets/edit'
   get 'session/new'
 root 'static_pages#home'
 
@@ -15,15 +17,10 @@ get    '/login',   to: 'sessions#new'
 post   '/login',   to: 'sessions#create'
 delete '/logout',  to: 'sessions#destroy'
 
-get '/show' ,  to: 'user#show'
-
-get '/index', to: 'room#index'
-get '/showroom' , to: 'room#show'
 
 
 resources :users
 resources :account_activations, only: [:edit] #ユーザーの承認メールはupdateではなくGETで送信されるためにeditを使っている
 
-resources :rooms, only: [:index, :show]
-resources :users, only: [:show]
+resources :password_resets,     only: [:new, :create, :edit, :update]
 end

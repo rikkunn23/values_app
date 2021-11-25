@@ -1,5 +1,5 @@
 class AccountActivationsController < ApplicationController
-
+# メールでクリックされてアクセスされたらここにくるparams[:id]として参照
     def edit
       user = User.find_by(email: params[:email])
       if user && !user.activated? && user.authenticated?(:activation, params[:id])

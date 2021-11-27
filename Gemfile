@@ -8,6 +8,23 @@ gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
 # Use sqlite3 as the database for Active Record
 # Use Puma as the app server
 
+# AWS用
+gem 'aws-sdk-s3',              '1.46.0', require: false
+
+# 画像の検証
+gem 'active_storage_validations', '0.8.2'
+
+# ImageMagick
+gem 'image_processing',           '1.9.3'
+gem 'mini_magick',                '4.9.5'
+
+
+
+gem 'sqlite3', group: [:development, :test]
+gem 'pg', group: :production
+
+
+
 #パスワードのハッシュ化
 gem 'bcrypt'
 #仮想の人物
@@ -38,7 +55,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.4', require: false
 
 group :development, :test do
-  gem 'sqlite3', '~> 1.4'
+  # gem 'sqlite3', '~> 1.4'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
@@ -66,7 +83,7 @@ end
 
 # PostgreSQLデータベース
 group :production do
-  gem 'pg', '1.1.4'
+  # gem 'pg', '1.1.4'
 end
 
 

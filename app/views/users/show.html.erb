@@ -10,4 +10,14 @@
       </h1>
     </section>
   </aside>
+  <div class="col-md-8">
+    <!-- micropostsの中身が存在したら -->
+    <% if @user.microposts.any? %>
+      <h3>Microposts (<%= @user.microposts.count %>)</h3>
+      <ol class="microposts">
+        <%= render @microposts %>  <!--_micropost.html.erbを自動で呼び出している -->
+      </ol>
+      <%= will_paginate @microposts %>
+    <% end %>
+  </div>
 </div>

@@ -4,6 +4,11 @@ class User < ApplicationRecord #ActiveRecordが適用
     before_save   :downcase_email
     before_create :create_activation_digest
 
+    # ユーザーがマイクロポストを複数所有する（has_many）関連付け
+    # dependent: :destroyはユーザーが削除された時にそのユーザーに紐付いたマイクロポストも消される
+    has_many :microposts, dependent: :destroy
+
+
     before_save { self.email = self.email.downcase}
     #中身があるかどうか 長さなど ハッシュは()省略
     validates :name,  presence: true, length: { maximum: 50 }
@@ -86,6 +91,18 @@ class User < ApplicationRecord #ActiveRecordが適用
     #2時間より早いというニュアンスで
     reset_sent_at < 2.hours.ago
   end
+
+
+  # すべてのユーザーがフィードを持つので、feedメソッドはUserモデルで作る
+  # 現在ログインしているユーザーのマイクロポストをすべて取得
+  # 試作feedの定義
+  # 完全な実装は次章の「ユーザーをフォローする」を参照
+  # SQL文に変数を代入する場合は常にエスケープする
+  def feed
+    # id属性は単なる整数（すなわちself.idはユーザーのid）
+    Micropost.where("user_id = ?", id)
+  end
+
 
 
 

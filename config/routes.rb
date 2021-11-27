@@ -23,4 +23,8 @@ resources :users
 resources :account_activations, only: [:edit] #ユーザーの承認メールはupdateではなくGETで送信されるためにeditを使っている
 
 resources :password_resets,     only: [:new, :create, :edit, :update]
+
+resources :microposts,          only: [:create, :destroy]
+# POST	/microposts	create	microposts_path
+# DELETE	/microposts/1	destroy	micropost_path(micropost)
 end

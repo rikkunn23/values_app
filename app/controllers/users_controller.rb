@@ -15,6 +15,8 @@ class UsersController < ApplicationController
 # 参照
   def show
     @user = User.find(params[:id])
+    # インスタンス変数をUsersコントローラで定義
+    @microposts = @user.microposts.paginate(page: params[:page])
   end
 
 #newcreate
@@ -72,15 +74,7 @@ class UsersController < ApplicationController
                                   :password_confirmation)
     end
 
- # ログイン済みユーザーかどうか確認
- #ログインしていないユーザーに書き加えられてしまっては困る
-    def logged_in_user
-      unless logged_in?
-        store_location #url保存
-        flash[:danger] = "ログインしてください"
-        redirect_to login_url
-      end
-    end
+
 
         # 正しいユーザーかどうか確認
         def correct_user

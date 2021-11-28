@@ -1,12 +1,45 @@
 class User < ApplicationRecord #ActiveRecordが適用
-    #読み書きのできる仮想の属性
+  # ユーザーがマイクロポストを複数所有する（has_many）関連付け
+  # dependent: :destroyはユーザーが削除された時にそのユーザーに紐付いたマイクロポストも消される
+  has_many :microposts, dependent: :destroy
+
+
+  #Railsはデフォルトでは外部キーの名前を<class>_idといったパターンとして理解
+  # 前はuser_idとuserというDBがありuserがあったが
+  #今回はfollowというクラスは存在しないので定義する必要がある
+
+# AはBをフォローBはAをフォロバしていない
+# AはBに対して「能動的関係」（Active Relationship）
+# BはAに対して「受動的関係」（Passive Relationship）
+
+# フォローしているユーザー
+  has_many :active_relationships, class_name:  "Relationship",
+                                  foreign_key: "follower_id",
+#ユーザーを削除したら、ユーザーのリレーションシップも同時に削除される必要がある
+                                  dependent:   :destroy
+  # ユーザーが削除された時にそのユーザーに紐付いたマイクロポストも消される
+
+  # 受動的関係
+  has_many :passive_relationships, class_name:  "Relationship",
+                                  foreign_key: "followed_id",
+                                  dependent:   :destroy
+#has_many :followeds, through: :active_relationships
+  # railsはfollowedというシンボル名を見て、これを「followed」という単数形に変換し
+#relationshipsテーブルのfollowed_idを使って対象のユーザーを取得
+# 名前は英語として不適切。代わりにuser.followingを使うために
+# :sourceパラメーター「following配列の元はfollowed idの集合である」＝配列で扱える
+# 　フォローしているユーザー
+has_many :following, through: :active_relationships, source: :followed
+# 受動的関係
+has_many :followers, through: :passive_relationships, source: :follower
+# :followedと:followerの情報を分けてuserに返している
+
+
+#読み書きのできる仮想の属性
     attr_accessor :remember_token, :activation_token, :reset_token
     before_save   :downcase_email
     before_create :create_activation_digest
 
-    # ユーザーがマイクロポストを複数所有する（has_many）関連付け
-    # dependent: :destroyはユーザーが削除された時にそのユーザーに紐付いたマイクロポストも消される
-    has_many :microposts, dependent: :destroy
 
 
     before_save { self.email = self.email.downcase}
@@ -98,13 +131,34 @@ class User < ApplicationRecord #ActiveRecordが適用
   # 試作feedの定義
   # 完全な実装は次章の「ユーザーをフォローする」を参照
   # SQL文に変数を代入する場合は常にエスケープする
-  def feed
+
     # id属性は単なる整数（すなわちself.idはユーザーのid）
-    Micropost.where("user_id = ?", id)
+     # ユーザーのステータスフィードを返す
+
+  def feed
+    # 配列をマップで回してフォローのIDを取得＝数が膨大になった場合がきついSELECTを使う
+    following_ids = "SELECT followed_id FROM relationships
+                     WHERE follower_id = :user_id"
+    Micropost.where("user_id IN (#{following_ids})
+                     OR user_id = :user_id", user_id: id)
+  end
+
+   # ユーザーをフォローする
+  # source:にてfollowingは配列になったため<<で最後に追加できる
+  def follow(other_user)
+    following << other_user
   end
 
 
+    # ユーザーをフォロー解除する
+  def unfollow(other_user)
+    active_relationships.find_by(followed_id: other_user.id).destroy
+  end
 
+  # 現在のユーザーがフォローしてたらtrueを返す
+  def following?(other_user)
+    following.include?(other_user)
+  end
 
   private
 
@@ -120,10 +174,4 @@ class User < ApplicationRecord #ActiveRecordが適用
     end
 
 
-
-    #トークルーム
-    # throughオプションは中間テーブルを経由して関連先のモデルを取得
-    has_many :messages
-    has_many :entries
-    has_many :rooms, through: :entries
 end

@@ -1,0 +1,6 @@
+<!-- 既存のリレーションシップを見つけ出す -->
+<!-- DELETEリクエストを送信してリレーションシップをdestroy（削除） -->
+<%= form_with(model: current_user.active_relationships.find_by(followed_id: @user.id),
+            html: { method: :delete }, local: true) do |f| %>
+  <%= f.submit "Unfollow", class: "btn btn-default" %>
+<% end %>

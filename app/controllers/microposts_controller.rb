@@ -1,4 +1,5 @@
 class MicropostsController < ApplicationController
+    protect_from_forgery
     # logged_in_userメソッド
     before_action :logged_in_user, only: [:create, :destroy]
 
@@ -25,11 +26,14 @@ class MicropostsController < ApplicationController
       end
 
       def destroy
-        @micropost.destroy
-        flash[:success] = "Micropost deleted"
+        micropost = Micropost.find(params[:id])
+        micropost.destroy
+        # @micropost.destroy
+        # flash[:success] = "Micropost deleted"
 
 #request.referrer は一つ前のURLを返します
-        redirect_to request.referrer || root_url
+        # redirect_to request.referrer || root_url
+        redirect_to root_url
       end
 
       private

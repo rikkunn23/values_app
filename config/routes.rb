@@ -17,6 +17,9 @@ get    '/login',   to: 'sessions#new'
 post   '/login',   to: 'sessions#create'
 delete '/logout',  to: 'sessions#destroy'
 
+post "/microposts", to: 'microposts#create'
+delete "/microposts/:id" => 'microposts#destroy'
+
 resources :users do
   # memberメソッドを使うとユーザーidが含まれているURLを扱う
   # すべてのメンバーを表示するには、次のようにcollectionメソッドを使う
@@ -35,7 +38,7 @@ resources :account_activations, only: [:edit] #ユーザーの承認メールは
 
 resources :password_resets,     only: [:new, :create, :edit, :update]
 
-resources :microposts,          only: [:create, :destroy]
+# resources :microposts,          only: [:create, :destroy]
 # POST	/microposts	create	microposts_path
 # DELETE	/microposts/1	destroy	micropost_path(micropost)
 

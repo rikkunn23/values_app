@@ -1,14 +1,34 @@
-<% provide(:title, 'All users') %>
-<h1>All users</h1>
+<% provide(:title, @title) %>
+<h1><%= @title %></h1>
+
+<div class="row">
+  <div class="search_form">
+    <%= render 'users/search_form' %>
+  </div>
+</div>
 
 <!-- @usersオブジェクトを自動的に見つける -->
 <%= will_paginate %>
 
-<ul class="users">
+<!-- <ul class="users"> -->
 <!-- ユーザー分eachを回してリストを作る -->
-  <% @users.each do |user| %>
+   <!-- < @users.each do |user| %> -->
 <!-- _userを自動的に探しに行く -->
-  <%= render user %>
+  <!-- < render user %> -->
+
+
+  <% unless @users.empty? %>
+  <ul class="users">
+    <!-- ユーザーリスト表示 -->
+    <%= render @users %>
+  </ul>
+<% else %>
+  <p>
+    Couldn't find any user.<br>
+    Please check username you are looking for.
+  </p>
+
+
 
   <% end %>
 </ul>

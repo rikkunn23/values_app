@@ -20,6 +20,7 @@ class MicropostsController < ApplicationController
           flash[:success] = "Micropost created!"
           redirect_to root_url
         else
+        @q = Micropost.none.ransack
         @feed_items = current_user.feed.paginate(page: params[:page])
           render 'static_pages/home'
         end
@@ -28,12 +29,12 @@ class MicropostsController < ApplicationController
       def destroy
         micropost = Micropost.find(params[:id])
         micropost.destroy
-        # @micropost.destroy
-        # flash[:success] = "Micropost deleted"
 
+        flash[:success] = "ツイートを削除しました。"
+        #削除した後ホームに戻らないようにしている
 #request.referrer は一つ前のURLを返します
-        # redirect_to request.referrer || root_url
-        redirect_to root_url
+        redirect_to request.referrer || root_url
+
       end
 
       private

@@ -1,7 +1,15 @@
 <% provide(:title, 'Sign up') %>
 
+
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+  <div class="bgi-container">
+    <%= link_to image_tag("smart.jpg", alt: "newloginimage", width: "1170px") %>
+    </div>
+
+
+
+    <div class="col-md-6 login-form-create">
+
       <%= form_with(model: @user, local: true) do |f| %>
 
       <%= render 'shared/error_messages', object: f.object %><!--パーシャルエラーメッセージ-->
@@ -19,5 +27,6 @@
 
         <%= f.submit "アカウントを作成", class: "btn btn-primary" %>
       <% end %>
+    </div>
     </div>
   </div>

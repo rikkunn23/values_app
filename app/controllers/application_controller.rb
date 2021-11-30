@@ -14,4 +14,10 @@ class ApplicationController < ActionController::Base
       redirect_to login_url
     end
   end
+
+  # UsersControllerとStaticPagesControllerの両方から利用
+  def microposts_search_params
+    params.require(:q).permit(:content_cont)
+  end
+
 end

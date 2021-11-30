@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_28_024018) do
+ActiveRecord::Schema.define(version: 2021_11_30_102737) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -50,13 +50,12 @@ ActiveRecord::Schema.define(version: 2021_11_28_024018) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.text "message"
-    t.integer "user_id", null: false
-    t.integer "room_id", null: false
+    t.text "content"
+    t.integer "from_id"
+    t.integer "to_id"
+    t.string "room_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["room_id"], name: "index_messages_on_room_id"
-    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "microposts", force: :cascade do |t|
@@ -104,7 +103,5 @@ ActiveRecord::Schema.define(version: 2021_11_28_024018) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "entries", "rooms"
   add_foreign_key "entries", "users"
-  add_foreign_key "messages", "rooms"
-  add_foreign_key "messages", "users"
   add_foreign_key "microposts", "users"
 end

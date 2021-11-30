@@ -9,7 +9,7 @@ gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
 # Use Puma as the app server
 
 # AWS用
-gem 'aws-sdk-s3',              '1.46.0', require: false
+gem 'aws-sdk-s3', '~> 1.2', require: false
 
 # 画像の検証
 gem 'active_storage_validations', '0.8.2'
